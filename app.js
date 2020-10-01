@@ -2,8 +2,8 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const request = require('request');
-
+//const request = require('request');
+const fetch = require('node-fetch');
 const app = express();
 
 app.use(bodyParser.urlencoded({
@@ -40,28 +40,29 @@ app.post("/", function(req, res) {
   // NOTE: The API KEY BELOW HAS BEEN DISABLED ON MAILCHIMP
   //       AS THIS CODE WILL BE PUSHED TO PUBLIC GITHUB
 
+  const url: 'https://us17.api.mailchimp.com/3.0/lists/232bd1ab2e',
+
   var options = {
-    url: 'https://us17.api.mailchimp.com/3.0/lists/232bd1ab2e',
     method: 'POST',
     headers: {
+      "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
       'Authorization': "anish1 4b713ffe2687d651c4f33866d41163c1-us17"
     },
     body: jsonData
   }
 
-  request(options, function(error, response, body) {
-    if (error) {
-      console.log(error);
+  fetch(url, options)
+  .then((res) => {
+    if(res.statusCode == 200){
+      res.sendFile(__dirname + "/success.html");
+    }else{
       res.sendFile(__dirname + "/failure.html");
-    } else {
-      if(response.statusCode == 200){
-        res.sendFile(__dirname + "/success.html");
-      }else{
-        res.sendFile(__dirname + "/failure.html");
-      }
     }
+  })
+  catch((err) => {
+    console.log(err);
   });
-});
+   
 
 app.post("/failure.html", function(req, res){
   res.redirect("/");
