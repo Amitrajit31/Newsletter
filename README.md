@@ -1,1 +1,1 @@
-
+Newsletter using Mailchimp API
